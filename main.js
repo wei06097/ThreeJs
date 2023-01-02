@@ -62,7 +62,13 @@ let camera, scene, renderer;
 let lon = 0, lat = 0, phi = 0, theta = 0;
 const MOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent)) === true;
 const SCALE = MOBILE? 0.8: 0.9;
+const SPEED = MOBILE? 0.5: 0.1;
 
+window.addEventListener("load", () => { 
+	setTimeout(() => {
+	    window.scrollTo(0, 1); 
+    }, 10);
+});
 panoramic_init();
 animate();
 console.log('初始化結束');
@@ -145,8 +151,8 @@ function onPointerUp(event) {
 
 function onPointerMove(event) {
     if (event.isPrimary === false) return;
-    lon = event.movementX * -0.1 + lon;
-    lat = event.movementY * 0.1 + lat;
+    lon = event.movementX * -1 * SPEED + lon;
+    lat = event.movementY * 1 * SPEED + lat;
 }
 
 /* ======================================== */
