@@ -67,6 +67,7 @@ let isUserInteracting = false,
 
 panoramic_init();
 animate();
+console.log('初始化結束')
 
 /* ======================================== */
 function createNewSphere (skin) {
@@ -80,10 +81,10 @@ function createNewSphere (skin) {
 
 function panoramic_init () {
     const views = document.getElementById("scenes");
-    SCENES_DATA.forEach((pic, i) => {
+    SCENES_DATA.forEach((scene, i) => {
         const option = document.createElement("option");
+        option.innerText = scene.title;
         option.value = i;
-        option.innerText = SCENES_DATA[i].title;
         views.append(option);
     });
     views.addEventListener('change', () => {
