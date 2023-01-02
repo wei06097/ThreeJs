@@ -60,15 +60,17 @@ const SCENES_DATA = [
 /* ======================================== */
 let camera, scene, renderer;
 let lon = 0, lat = 0, phi = 0, theta = 0;
-const MOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent)) === true;
-const SCALE = MOBILE? 0.8: 0.9;
-const SPEED = MOBILE? 0.5: 0.1;
 
-window.addEventListener("load", () => { 
-	setTimeout(() => {
-	    window.scrollTo(0, 1); 
-    }, 10);
-});
+const onMOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent));
+const SCALE = onMOBILE? 0.8: 0.9;
+const SPEED = onMOBILE? 0.35: 0.1;
+
+let mobileW = 0, mobileH = 0;
+if (onMOBILE) {
+    mobileW = (window.innerWidth < window.innerHeight)? window.innerWidth: window.innerHeight;
+    mobileH = (window.innerWidth < window.innerHeight)? window.innerHeight: window.innerWidth;
+}
+
 panoramic_init();
 animate();
 console.log('初始化結束');
@@ -112,7 +114,7 @@ function panoramic_init() {
     renderer.setSize(window.innerWidth*SCALE, window.innerHeight*SCALE);
     container.appendChild(renderer.domElement);
 
-    if (!MOBILE) {
+    if (!onMOBILE) {
         container.addEventListener('pointerdown', onPointerDown);
         document.addEventListener('wheel', onDocumentMouseWheel);
         window.addEventListener('resize', onWindowResize);
@@ -125,9 +127,17 @@ function panoramic_init() {
 
 /* ======================================== */
 function onWindowResize() {
-    camera.aspect = window.innerWidth/window.innerHeight;
+    let settingW, settingH;
+    if (onMOBILE) {
+        settingW = (window.innerWidth < window.innerHeight)? mobileW: window.innerWidth;
+        settingH = (window.innerWidth < window.innerHeight)? mobileH: window.innerHeight;
+    } else {
+        settingW = window.innerWidth;
+        settingH = window.innerHeight;
+    }
+    camera.aspect = settingW / settingH;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth*SCALE, window.innerHeight*SCALE);
+    renderer.setSize(settingW*SCALE, settingH*SCALE);
 }
 
 function onDocumentMouseWheel(event) {
