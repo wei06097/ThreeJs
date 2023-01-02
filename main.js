@@ -1,5 +1,4 @@
 const PIC = [
-    'https://img.alicdn.com/imgextra/i2/6000000004217/O1CN01djW9bE1h1QprTMP5d_!!6000000004217-0-hotel.jpg',
     'media/sekiro1.png',
     'media/sekiro2.png',
     'media/sekiro3.png',
@@ -49,6 +48,21 @@ function createNewSphere (skin) {
 }
 
 function panoramic_init () {
+    const views = document.getElementById("scenes");
+    PIC.forEach((pic, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.innerText = i;
+        views.append(option);
+    });
+    views.addEventListener('change', () => {
+        scene.clear();
+        const mesh = createNewSphere(PIC[views.value]);
+        // lon = onPointerDownLon = position[views.value].lon;
+        // lat = onPointerDownLat = position[views.value].lat;
+        scene.add(mesh);
+    });
+
     const container = document.getElementById('container');
     camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);  
     const mesh = createNewSphere(PIC[1]);
@@ -65,15 +79,6 @@ function panoramic_init () {
     container.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('wheel', onDocumentMouseWheel);
     window.addEventListener('resize', onWindowResize);
-
-    const views = document.getElementById("scenes");
-    views.addEventListener('change', () => {
-        scene.clear();
-        const mesh = createNewSphere(PIC[views.value]);
-        // lon = onPointerDownLon = position[views.value].lon;
-        // lat = onPointerDownLat = position[views.value].lat;
-        scene.add(mesh);
-    })
 }
 
 /* ======================================== */
