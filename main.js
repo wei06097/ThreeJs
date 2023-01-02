@@ -57,8 +57,6 @@ const SCENES_DATA = [
     }
 ];
 
-let displacement_speed = (/Mobi|Android|iPhone/i.test(navigator.userAgent))? 1: 0.1;
-
 /* ======================================== */
 let camera, scene, renderer;
 let isUserInteracting = false,
@@ -66,6 +64,7 @@ let isUserInteracting = false,
     lon = 0, onPointerDownLon = 0,
     lat = 0, onPointerDownLat = 0,
     phi = 0, theta = 0;
+const MOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent)) === true;
 
 panoramic_init();
 animate();
@@ -110,9 +109,13 @@ function panoramic_init () {
     renderer.setSize(window.innerWidth*0.9, window.innerHeight*0.9);
     container.appendChild(renderer.domElement);
 
-    container.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('wheel', onDocumentMouseWheel);
-    window.addEventListener('resize', onWindowResize);
+    if (!MOBILE) {
+        container.addEventListener('pointerdown', onPointerDown);
+        document.addEventListener('wheel', onDocumentMouseWheel);
+        window.addEventListener('resize', onWindowResize);
+    } else {
+        document.addEventListener('pointermove', onPointerMove);
+    }
 }
 
 /* ======================================== */
@@ -130,7 +133,7 @@ function onDocumentMouseWheel(event) {
 
 /* ======================================== */
 function onPointerDown(event) {
-    // if (event.isPrimary === false) return;
+    if (event.isPrimary === false) return;
     onPointerDownMouseX = event.clientX;
     onPointerDownMouseY = event.clientY;
     onPointerDownLon = lon;
@@ -140,13 +143,13 @@ function onPointerDown(event) {
 }
 
 function onPointerUp(event) {
-    // if (event.isPrimary === false) return;
+    if (event.isPrimary === false) return;
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup', onPointerUp);
 }
 
 function onPointerMove(event) {
-    // if (event.isPrimary === false) return;
+    if (event.isPrimary === false) return;
     lon = (onPointerDownMouseX - event.clientX) * displacement_speed + onPointerDownLon;
     lat = (event.clientY - onPointerDownMouseY) * displacement_speed + onPointerDownLat;
 }
