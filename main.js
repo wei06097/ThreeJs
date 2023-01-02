@@ -1,31 +1,62 @@
-const PIC = [
-    'media/sekiro1.png',
-    'media/sekiro2.png',
-    'media/sekiro3.png',
-    'media/sekiro4.png',
-    'media/sekiro5.png',
-    'media/sekiro6.png',
-    'media/sekiro7.png',
+const SCENES_DATA = [
+    {
+        "title": "平田宅第",
+        "picture": "media/sekiro1.png",
+        "position": {
+            "lon": 195.67,
+            "lat": -8.47
+        }
+    },
+    {
+        "title": "崩落峽谷",
+        "picture": "media/sekiro2.png",
+        "position": {
+            "lon": 109.36,
+            "lat": -1.20
+        }
+    },
+    {
+        "title": "仙峰寺-1",
+        "picture": "media/sekiro3.png",
+        "position": {
+            "lon": 178.79,
+            "lat": -6.47
+        }
+    },
+    {
+        "title": "仙峰寺-2",
+        "picture": "media/sekiro4.png",
+        "position": {
+            "lon": 161.83,
+            "lat": -5.11
+        }
+    },
+    {
+        "title": "鎧甲武士",
+        "picture": "media/sekiro5.png",
+        "position": {
+            "lon": 207.59,
+            "lat": -24.23
+        }
+    },
+    {
+        "title": "白蛇",
+        "picture": "media/sekiro6.png",
+        "position": {
+            "lon": 166.47,
+            "lat": -12.47
+        }
+    },
+    {
+        "title": "嗟怨之鬼",
+        "picture": "media/sekiro7.png",
+        "position": {
+            "lon": 185.91,
+            "lat": 12.16
+        }
+    }
 ];
 
-const position = [
-    {
-        'lat': 2.68,
-        'lon': -260.38
-    },
-    {
-        'lat': -6.5,
-        'lon': 195
-    },
-    {
-        'lat': -5.12,
-        'lon': 178.64
-    },
-    {
-        'lat': -16,
-        'lon': -15
-    },
-]
 /* ======================================== */
 let camera, scene, renderer;
 let isUserInteracting = false,
@@ -49,25 +80,25 @@ function createNewSphere (skin) {
 
 function panoramic_init () {
     const views = document.getElementById("scenes");
-    PIC.forEach((pic, i) => {
+    SCENES_DATA.forEach((pic, i) => {
         const option = document.createElement("option");
         option.value = i;
-        option.innerText = i;
+        option.innerText = SCENES_DATA[i].title;
         views.append(option);
     });
     views.addEventListener('change', () => {
+        const mesh = createNewSphere(SCENES_DATA[views.value].picture);
         scene.clear();
-        const mesh = createNewSphere(PIC[views.value]);
-        // lon = onPointerDownLon = position[views.value].lon;
-        // lat = onPointerDownLat = position[views.value].lat;
+        lon = onPointerDownLon = SCENES_DATA[views.value].position.lon;
+        lat = onPointerDownLat = SCENES_DATA[views.value].position.lat;
         scene.add(mesh);
     });
 
     const container = document.getElementById('container');
     camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);  
-    const mesh = createNewSphere(PIC[1]);
-    // lon = onPointerDownLon = position[0].lon;
-    // lat = onPointerDownLat = position[0].lat;
+    const mesh = createNewSphere(SCENES_DATA[0].picture);
+    lon = onPointerDownLon = SCENES_DATA[0].position.lon;
+    lat = onPointerDownLat = SCENES_DATA[0].position.lat;
     scene = new THREE.Scene();
     scene.add(mesh);
 
