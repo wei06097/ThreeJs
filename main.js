@@ -61,13 +61,14 @@ const SCENES_DATA = [
 let camera, scene, renderer;
 let lon = 0, lat = 0, phi = 0, theta = 0;
 const MOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent)) === true;
+const SCALE = MOBILE? 0.8: 0.9;
 
 panoramic_init();
 animate();
 console.log('初始化結束');
 
 /* ======================================== */
-function createNewSphere (skin) {
+function createNewSphere(skin) {
     const geometry = new THREE.SphereGeometry(500, 64, 32);
     geometry.scale(-1, 1, 1);
     const texture = new THREE.TextureLoader().load(skin);
@@ -76,7 +77,7 @@ function createNewSphere (skin) {
     return mesh;
 }
 
-function panoramic_init () {
+function panoramic_init() {
     const views = document.getElementById("scenes");
     SCENES_DATA.forEach((data, i) => {
         const option = document.createElement("option");
@@ -102,7 +103,7 @@ function panoramic_init () {
 
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth*0.9, window.innerHeight*0.9);
+    renderer.setSize(window.innerWidth*SCALE, window.innerHeight*SCALE);
     container.appendChild(renderer.domElement);
 
     if (!MOBILE) {
@@ -110,7 +111,8 @@ function panoramic_init () {
         document.addEventListener('wheel', onDocumentMouseWheel);
         window.addEventListener('resize', onWindowResize);
     } else {
-        document.addEventListener('pointermove', onPointerMove);
+        container.style.touchAction = "none";
+        container.addEventListener('pointermove', onPointerMove);
         window.addEventListener('resize', onWindowResize);
     }
 }
@@ -119,7 +121,7 @@ function panoramic_init () {
 function onWindowResize() {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth*0.9, window.innerHeight*0.9);
+    renderer.setSize(window.innerWidth*SCALE, window.innerHeight*SCALE);
 }
 
 function onDocumentMouseWheel(event) {
