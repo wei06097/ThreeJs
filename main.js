@@ -1,7 +1,7 @@
 const SCENES_DATA = [
     {
-        "title": "平田宅第",
-        "picture": "media/sekiro1.png",
+        "title": "平田宅邸",
+        "picture": "https://i.imgur.com/oqbBq7I.jpg", //"media/sekiro1.png",
         "position": {
             "lon": 195.67,
             "lat": -8.47
@@ -9,7 +9,7 @@ const SCENES_DATA = [
     },
     {
         "title": "崩落峽谷",
-        "picture": "media/sekiro2.png",
+        "picture": "https://i.imgur.com/uZ9LwXm.jpg", //"media/sekiro2.png",
         "position": {
             "lon": 109.36,
             "lat": -1.20
@@ -17,7 +17,7 @@ const SCENES_DATA = [
     },
     {
         "title": "仙峰寺-1",
-        "picture": "media/sekiro3.png",
+        "picture": "https://i.imgur.com/axuOtEi.jpg", //"media/sekiro3.png",
         "position": {
             "lon": 178.79,
             "lat": -6.47
@@ -25,7 +25,7 @@ const SCENES_DATA = [
     },
     {
         "title": "仙峰寺-2",
-        "picture": "media/sekiro4.png",
+        "picture": "https://i.imgur.com/GseedYO.jpg", //"media/sekiro4.png",
         "position": {
             "lon": 161.83,
             "lat": -5.11
@@ -57,6 +57,8 @@ const SCENES_DATA = [
     }
 ];
 
+let displacement_speed = (/Mobi|Android|iPhone/i.test(navigator.userAgent))? 1: 0.1;
+
 /* ======================================== */
 let camera, scene, renderer;
 let isUserInteracting = false,
@@ -67,7 +69,7 @@ let isUserInteracting = false,
 
 panoramic_init();
 animate();
-console.log('初始化結束')
+console.log('初始化結束');
 
 /* ======================================== */
 function createNewSphere (skin) {
@@ -81,9 +83,9 @@ function createNewSphere (skin) {
 
 function panoramic_init () {
     const views = document.getElementById("scenes");
-    SCENES_DATA.forEach((scene, i) => {
+    SCENES_DATA.forEach((data, i) => {
         const option = document.createElement("option");
-        option.innerText = scene.title;
+        option.innerText = data.title;
         option.value = i;
         views.append(option);
     });
@@ -141,13 +143,12 @@ function onPointerUp(event) {
     if (event.isPrimary === false) return;
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup', onPointerUp);
-    console.log(lon, lat);
 }
 
 function onPointerMove(event) {
     if (event.isPrimary === false) return;
-    lon = (onPointerDownMouseX - event.clientX) * 0.1 + onPointerDownLon;
-    lat = (event.clientY - onPointerDownMouseY) * 0.1 + onPointerDownLat;
+    lon = (onPointerDownMouseX - event.clientX) * displacement_speed + onPointerDownLon;
+    lat = (event.clientY - onPointerDownMouseY) * displacement_speed + onPointerDownLat;
 }
 
 /* ======================================== */
