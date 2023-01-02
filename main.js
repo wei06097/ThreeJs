@@ -35,24 +35,24 @@ const SCENES_DATA = [
         "title": "鎧甲武士",
         "picture": "media/sekiro5.png",
         "position": {
-            "lon": 207.59,
-            "lat": -24.23
+            "lon": 228,
+            "lat": -27
         }
     },
     {
         "title": "白蛇",
         "picture": "media/sekiro6.png",
         "position": {
-            "lon": 166.47,
-            "lat": -12.47
+            "lon": 275,
+            "lat": 2
         }
     },
     {
         "title": "嗟怨之鬼",
         "picture": "media/sekiro7.png",
         "position": {
-            "lon": 185.91,
-            "lat": 12.16
+            "lon": 257,
+            "lat": 23
         }
     }
 ]
@@ -157,7 +157,6 @@ function onPointerUp(event) {
     if (event.isPrimary === false) return
     document.removeEventListener('pointermove', onPointerMove)
     document.removeEventListener('pointerup', onPointerUp)
-    console.log(lon, lat)
 }
 
 function onPointerMove(event) {
