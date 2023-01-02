@@ -150,8 +150,8 @@ function onPointerUp(event) {
 
 function onPointerMove(event) {
     if (event.isPrimary === false) return;
-    lon = (onPointerDownMouseX - event.clientX) * displacement_speed + onPointerDownLon;
-    lat = (event.clientY - onPointerDownMouseY) * displacement_speed + onPointerDownLat;
+    lon = (onPointerDownMouseX - event.clientX) * 0.1 + onPointerDownLon;
+    lat = (event.clientY - onPointerDownMouseY) * 0.1 + onPointerDownLat;
 }
 
 /* ======================================== */
