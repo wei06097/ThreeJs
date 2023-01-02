@@ -59,11 +59,7 @@ const SCENES_DATA = [
 
 /* ======================================== */
 let camera, scene, renderer;
-let isUserInteracting = false,
-    onPointerDownMouseX = 0, onPointerDownMouseY = 0,
-    lon = 0, onPointerDownLon = 0,
-    lat = 0, onPointerDownLat = 0,
-    phi = 0, theta = 0;
+let lon = 0, lat = 0, phi = 0, theta = 0;
 const MOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent)) === true;
 
 panoramic_init();
@@ -91,16 +87,16 @@ function panoramic_init () {
     views.addEventListener('change', () => {
         const mesh = createNewSphere(SCENES_DATA[views.value].picture);
         scene.clear();
-        lon = onPointerDownLon = SCENES_DATA[views.value].position.lon;
-        lat = onPointerDownLat = SCENES_DATA[views.value].position.lat;
+        lon = SCENES_DATA[views.value].position.lon;
+        lat = SCENES_DATA[views.value].position.lat;
         scene.add(mesh);
     });
 
     const container = document.getElementById('container');
     camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);  
     const mesh = createNewSphere(SCENES_DATA[0].picture);
-    lon = onPointerDownLon = SCENES_DATA[0].position.lon;
-    lat = onPointerDownLat = SCENES_DATA[0].position.lat;
+    lon = SCENES_DATA[0].position.lon;
+    lat = SCENES_DATA[0].position.lat;
     scene = new THREE.Scene();
     scene.add(mesh);
 
@@ -115,6 +111,7 @@ function panoramic_init () {
         window.addEventListener('resize', onWindowResize);
     } else {
         document.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('resize', onWindowResize);
     }
 }
 
@@ -134,10 +131,6 @@ function onDocumentMouseWheel(event) {
 /* ======================================== */
 function onPointerDown(event) {
     if (event.isPrimary === false) return;
-    onPointerDownMouseX = event.clientX;
-    onPointerDownMouseY = event.clientY;
-    onPointerDownLon = lon;
-    onPointerDownLat = lat;
     document.addEventListener('pointermove', onPointerMove);
     document.addEventListener('pointerup', onPointerUp);
 }
@@ -150,8 +143,8 @@ function onPointerUp(event) {
 
 function onPointerMove(event) {
     if (event.isPrimary === false) return;
-    lon = (onPointerDownMouseX - event.clientX) * 0.1 + onPointerDownLon;
-    lat = (event.clientY - onPointerDownMouseY) * 0.1 + onPointerDownLat;
+    lon = event.movementX * -0.1 + lon;
+    lat = event.movementY * 0.1 + lat;
 }
 
 /* ======================================== */
