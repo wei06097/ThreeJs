@@ -130,7 +130,7 @@ function onDocumentMouseWheel(event) {
 
 /* ======================================== */
 function onPointerDown(event) {
-    if (event.isPrimary === false) return;
+    // if (event.isPrimary === false) return;
     onPointerDownMouseX = event.clientX;
     onPointerDownMouseY = event.clientY;
     onPointerDownLon = lon;
@@ -140,13 +140,13 @@ function onPointerDown(event) {
 }
 
 function onPointerUp(event) {
-    if (event.isPrimary === false) return;
+    // if (event.isPrimary === false) return;
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup', onPointerUp);
 }
 
 function onPointerMove(event) {
-    if (event.isPrimary === false) return;
+    // if (event.isPrimary === false) return;
     lon = (onPointerDownMouseX - event.clientX) * displacement_speed + onPointerDownLon;
     lat = (event.clientY - onPointerDownMouseY) * displacement_speed + onPointerDownLat;
 }
