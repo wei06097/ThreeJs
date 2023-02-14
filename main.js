@@ -1,3 +1,4 @@
+/* ======================================== */
 const SCENES_DATA = [
     {
         "title": "平田宅邸",
@@ -58,22 +59,15 @@ const SCENES_DATA = [
 ]
 
 /* ======================================== */
+const onMOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent))
+const SPEED = onMOBILE? 0.5: 0.1
+const SCALE = 1
+
 let camera, scene, renderer
 let lon = 0, lat = 0
 
-const onMOBILE = (/Mobi|Android|iPhone/i.test(navigator.userAgent))
-const SCALE = onMOBILE? 0.8: 0.9
-const SPEED = onMOBILE? 0.35: 0.1
-
-let mobileW = 0, mobileH = 0
-if (onMOBILE) {
-    mobileW = (window.innerWidth < window.innerHeight)? window.innerWidth: window.innerHeight
-    mobileH = (window.innerWidth < window.innerHeight)? window.innerHeight: window.innerWidth
-}
-
 panoramic_init()
 animate()
-console.log('初始化成功')
 
 /* ======================================== */
 function createNewSphere(skin) {
@@ -114,55 +108,38 @@ function panoramic_init() {
     renderer.setSize(window.innerWidth * SCALE, window.innerHeight * SCALE)
     container.appendChild(renderer.domElement)
 
-    if (!onMOBILE) {
-        container.addEventListener('pointerdown', onPointerDown)
-        document.addEventListener('wheel', onDocumentMouseWheel)
-        window.addEventListener('resize', onWindowResize)
-    } else {
-        container.style.touchAction = "none"
-        container.addEventListener('pointermove', onPointerMove)
-        window.addEventListener('resize', onWindowResize)
-    }
+    container.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('wheel', onDocumentMouseWheel)
+    window.addEventListener('resize', onWindowResize)
 }
 
 /* ======================================== */
 function onWindowResize() {
-    let settingW, settingH
-    if (onMOBILE) {
-        settingW = (window.innerWidth < window.innerHeight)? mobileW: window.innerWidth
-        settingH = (window.innerWidth < window.innerHeight)? mobileH: window.innerHeight
-    } else {
-        settingW = window.innerWidth
-        settingH = window.innerHeight
-    }
+    let settingW = window.innerWidth
+    let settingH = window.innerHeight
     camera.aspect = settingW / settingH
     camera.updateProjectionMatrix()
     renderer.setSize(settingW * SCALE, settingH * SCALE)
 }
 
-function onDocumentMouseWheel(event) {
-    const fov = camera.fov + event.deltaY * 0.05
+function onDocumentMouseWheel(e) {
+    const fov = camera.fov + e.deltaY * 0.05
     camera.fov = THREE.MathUtils.clamp(fov, 10, 75)
     camera.updateProjectionMatrix()
 }
 
 /* ======================================== */
-function onPointerDown(event) {
-    if (event.isPrimary === false) return
+function onPointerDown() {
     document.addEventListener('pointermove', onPointerMove)
     document.addEventListener('pointerup', onPointerUp)
 }
-
-function onPointerUp(event) {
-    if (event.isPrimary === false) return
+function onPointerUp() {
     document.removeEventListener('pointermove', onPointerMove)
     document.removeEventListener('pointerup', onPointerUp)
 }
-
-function onPointerMove(event) {
-    if (event.isPrimary === false) return
-    lon = event.movementX * SPEED + lon
-    lat = event.movementY * SPEED + lat
+function onPointerMove(e) {
+    lon = e.movementX * SPEED + lon
+    lat = e.movementY * SPEED + lat
 }
 
 /* ======================================== */
@@ -170,7 +147,6 @@ function animate() {
     requestAnimationFrame(animate)
     update()
 }
-
 function update() {
     lat = Math.max(-85, Math.min(85, lat))
     const theta = THREE.MathUtils.degToRad(90 - lat)
