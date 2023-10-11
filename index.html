@@ -5,35 +5,43 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width", initial-scale="1.0"
             maximum-scale="1.0", user-scalable="no">
-        <title>球形全景測試</title>
-        <script defer src="https://cdn.bootcdn.net/ajax/libs/three.js/r122/three.min.js"></script>
+        <title>Sekiro Panorama</title>
+        <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r122/three.min.js"></script>
         <script defer type="text/javascript" src="main.js"></script>
         <style>
+            *, *:before, *:after {
+                box-sizing: border-box;
+            }
             body {
-                font-family: Arial, Helvetica, sans-serif;
                 margin: 0; overflow: hidden;
-                box-sizing: content-box;
-                width: 100%; height: 100%;
+                width: 100vw; height: 100vh;
                 background-color: black;
             }
             #container {
                 width: 100%; height: 100%;
                 touch-action: none;
-                cursor: grab;
             }
-            #container:active {cursor: grabbing;}
-            #scenes {
-                width: 100px;
-                position: fixed; font-size: 18px;
-                z-index: 1; top: 20px; left: calc(50% - 100px / 2);
-                padding: 2px; border-radius: 5px;
-                border: 0; outline: none;
-                box-shadow: 0 0 2px 2px #ddd;
+            .background {
+                width: 50px; object-fit: cover;
+                position: fixed; z-index: 1;
+                top: 20px; right: 20px;
+            }
+            .snapshots {
+                position: fixed; z-index: 1;
+                top: 80px; right: 20px;
+                display: flex; gap: 10px;
+                flex-direction: column;
+            }
+            .snapshots > img {
+                width: 180px; border-radius: 5px;
+                border: 1px solid white;
+                position: relative; top: 0; right: 0;
             }
         </style>
     </head>
 	<body>
-        <select id="scenes"></select>
 		<div id="container"></div>
+        <img class="background" src="media/background.png" alt="">
+        <div class="snapshots"></div>
 	</body>
 </html>

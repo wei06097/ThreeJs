@@ -2,7 +2,7 @@
 const SCENES_DATA = [
     {
         "title": "平田宅邸",
-        "picture": "https://i.imgur.com/oqbBq7I.jpg", //"media/sekiro1.png",
+        "picture": "media/sekiro1.png",
         "position": {
             "lon": 269,
             "lat": -6
@@ -10,7 +10,7 @@ const SCENES_DATA = [
     },
     {
         "title": "崩落峽谷",
-        "picture": "https://i.imgur.com/uZ9LwXm.jpg", //"media/sekiro2.png",
+        "picture": "media/sekiro2.png",
         "position": {
             "lon": -24,
             "lat": 0
@@ -18,7 +18,7 @@ const SCENES_DATA = [
     },
     {
         "title": "仙峰寺-1",
-        "picture": "https://i.imgur.com/axuOtEi.jpg", //"media/sekiro3.png",
+        "picture": "media/sekiro3.png",
         "position": {
             "lon": -87,
             "lat": -8
@@ -26,7 +26,7 @@ const SCENES_DATA = [
     },
     {
         "title": "仙峰寺-2",
-        "picture": "https://i.imgur.com/GseedYO.jpg", //"media/sekiro4.png",
+        "picture": "media/sekiro4.png",
         "position": {
             "lon": 118,
             "lat": -2
@@ -80,23 +80,32 @@ function createNewSphere(skin) {
 }
 
 function panoramic_init() {
-    const views = document.getElementById("scenes")
+    const snapshots = document.querySelector(".snapshots")
     SCENES_DATA.forEach((data, i) => {
-        const option = document.createElement("option")
-        option.innerText = data.title
-        option.value = i
-        views.append(option)
+        const img = document.createElement("img")
+        img.className = "snapshots"
+        img.src = data.picture.replace(".png", "-snapshot.png")
+        snapshots.append(img)
+        img.addEventListener("click", () => {
+            snapshots.querySelectorAll("img").forEach(element => element.style.borderColor = "white")
+            img.style.borderColor = "blue"
+            const mesh = createNewSphere(SCENES_DATA[i].picture)
+            scene.clear()
+            lon = SCENES_DATA[i].position.lon
+            lat = SCENES_DATA[i].position.lat
+            scene.add(mesh)
+        })
     })
-    views.addEventListener('change', () => {
-        const mesh = createNewSphere(SCENES_DATA[views.value].picture)
-        scene.clear()
-        lon = SCENES_DATA[views.value].position.lon
-        lat = SCENES_DATA[views.value].position.lat
-        scene.add(mesh)
+    
+    const background = document.querySelector(".background")
+    background.addEventListener("click", () => {
+        snapshots.style.display = (snapshots.style.display === "none")? "flex": "none"
     })
+    snapshots.style.display = "none"
 
     const container = document.getElementById('container')
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)  
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
+    snapshots.querySelector("img").style.borderColor = "blue"
     const mesh = createNewSphere(SCENES_DATA[0].picture)
     lon = SCENES_DATA[0].position.lon
     lat = SCENES_DATA[0].position.lat
